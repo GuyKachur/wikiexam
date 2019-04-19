@@ -26,9 +26,46 @@ class SearchBar extends Component {
     this.state = {
       value: "",
       suggestions: [],
-      history: [],
-      links: []
+      searchs: [],
+      links: [],
+      links: [],
+      categories: [],
+      text: "",
+      title: ""
     };
+  }
+
+  componentDidMount() {
+    console.log("Componenet did mount", this.props.match.params.phrase);
+    if (
+      this.props.match.params.phrase === "" ||
+      this.props.match.params.phrase === null ||
+      this.props.match.params.phrase === undefined ||
+      typeof this.props.match.params.pharse !== "string"
+    ) {
+      console.log("no Props passed in");
+    } else {
+      Meteor.call(
+        "queryWikipedia",
+        this.props.match.params.phrase,
+        (err, res) => {
+          if (err) {
+            alert("There was error check the console");
+            console.log(err);
+            return;
+          }
+          console.log("suggestion selected", res);
+          this.setState({
+            links: res.externallinks,
+            categories: res.categories,
+            text: res.text["*"],
+            title: res.title
+          });
+          //display incoming results on page
+          //  this.setState();
+        }
+      );
+    }
   }
 
   getSuggestions(value) {
@@ -66,15 +103,22 @@ class SearchBar extends Component {
 
   onSuggestionSelected(_event, { suggestion }) {
     console.log("On suggestion selected", suggestion);
-    this.setState({ history: this.state.history.push(suggestion) });
-    Meteor.call("queryWikipedia", suggestion.name, (err, res) => {
+    //this.setState({ history: this.state.history.push(suggestion) });
+    Meteor.call("queryWikipedia", suggestion, (err, res) => {
       if (err) {
         alert("There was error check the console");
         console.log(err);
         return;
       }
       console.log("suggestion selected", res);
+      this.setState({
+        links: res.externallinks,
+        categories: res.categories,
+        text: res.text["*"],
+        title: res.title
+      });
       //display incoming results on page
+      //  this.setState();
     });
   }
 
@@ -89,9 +133,33 @@ class SearchBar extends Component {
       className:
         "shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker leading-tight focus:outline-none focus:shadow-outline mb-4"
     };
+    //  console.log("Links", this.state.links);
+    const links =
+      this.state.links.length === 0
+        ? ""
+        : this.state.links.map((item, index) => {
+            return (
+              <a key={index} href={item}>
+                {item}
+              </a>
+            );
+          });
+    //console.log("categories", this.state.categories);
+    const categories =
+      this.state.categories.length === 0
+        ? ""
+        : this.state.categories.map((item, index) => {
+            return (
+              <a key={index} href={item}>
+                {item["*"]}
+                <br />
+              </a>
+            );
+          });
 
     return (
       <div>
+        <h1>Jankapedia</h1>
         <Autosuggest
           suggestions={this.state.suggestions}
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
@@ -103,11 +171,12 @@ class SearchBar extends Component {
         />
         <div>
           {" "}
+          <span dangerouslySetInnerHTML={{ __html: this.state.text }} />
           <h1> Links </h1>
+          {links}
+          <h2> categories </h2>
+          {categories}
         </div>
-        {this.state.history.map(e => {
-          return <p> e </p>;
-        })}
       </div>
     );
   }

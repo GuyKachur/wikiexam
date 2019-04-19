@@ -1,15 +1,24 @@
-import React from "react";
-import Hello from "./Hello.jsx";
-import Info from "./Info.jsx";
+import React, { Component } from "react";
 import SearchBar from "./SearchBar.jsx";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-const App = () => (
-  <div>
-    <h1>Jankapedia</h1>
-    <SearchBar />
-    <Hello />
-    <Info />
+const NotFoundPage = () => (
+  <div className="container text-center">
+    <h2>Page not found</h2>
+    <div>please send help</div>
   </div>
 );
 
-export default App;
+export default class App extends Component {
+  render() {
+    return (
+      <Router>
+        <Switch>
+          <Route exact path="/" component={SearchBar} />
+          <Route exact path="/wiki/:phrase" component={SearchBar} />
+          <Route component={NotFoundPage} />
+        </Switch>
+      </Router>
+    );
+  }
+}
