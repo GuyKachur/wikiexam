@@ -43,8 +43,7 @@ class SearchBar extends Component {
     if (
       this.props.match.params.phrase === "" ||
       this.props.match.params.phrase === null ||
-      this.props.match.params.phrase === undefined ||
-      typeof this.props.match.params.pharse !== "string"
+      this.props.match.params.phrase === undefined
     ) {
       console.log("Invalid props passed: ", this.props);
     } else {
