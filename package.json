@@ -10,8 +10,11 @@
   "dependencies": {
     "@babel/runtime": "^7.3.4",
     "meteor-node-stubs": "^0.4.1",
+    "node-wikipedia": "0.0.2",
     "react": "^16.5.0",
-    "react-dom": "^16.5.0"
+    "react-autosuggest": "^9.4.3",
+    "react-dom": "^16.5.0",
+    "throttle-debounce": "^2.1.0"
   },
   "meteor": {
     "mainModule": {
@@ -19,5 +22,9 @@
       "server": "server/main.js"
     },
     "testModule": "tests/main.js"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-plugin-react": "^7.12.4"
   }
 }
