@@ -139,9 +139,11 @@ class SearchBar extends Component {
         ? ""
         : this.state.links.map((item, index) => {
             return (
-              <a key={index} href={item}>
-                {item}
-              </a>
+              <span key={index}>
+                {" "}
+                <a href={item}>{item}</a>
+                <br />
+              </span>
             );
           });
     //console.log("categories", this.state.categories);
@@ -150,10 +152,10 @@ class SearchBar extends Component {
         ? ""
         : this.state.categories.map((item, index) => {
             return (
-              <a key={index} href={item}>
-                {item["*"]}
+              <span key={index}>
+                <a href={item}>{item["*"]}</a>
                 <br />
-              </a>
+              </span>
             );
           });
 
